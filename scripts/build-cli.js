@@ -38,11 +38,12 @@ try {
     cwd: uiDir
   });
 
-  // Step 3: Create CLI dist directory
+  // Step 3: Clean and create CLI dist directory
   const cliDistDir = path.join(cliDir, 'dist');
-  if (!fs.existsSync(cliDistDir)) {
-    fs.mkdirSync(cliDistDir, { recursive: true });
+  if (fs.existsSync(cliDistDir)) {
+    fs.rmSync(cliDistDir, { recursive: true, force: true });
   }
+  fs.mkdirSync(cliDistDir, { recursive: true });
 
   // Step 4: Build the CLI application
   console.log('Building CLI application...');

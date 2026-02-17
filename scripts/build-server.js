@@ -9,11 +9,12 @@ console.log('Building Server package...');
 try {
   const serverDir = path.join(__dirname, '../packages/server');
 
-  // Create dist directory
+  // Clean and create dist directory
   const distDir = path.join(serverDir, 'dist');
-  if (!fs.existsSync(distDir)) {
-    fs.mkdirSync(distDir, { recursive: true });
+  if (fs.existsSync(distDir)) {
+    fs.rmSync(distDir, { recursive: true, force: true });
   }
+  fs.mkdirSync(distDir, { recursive: true });
 
   // Generate type declaration files
   console.log('Generating type declaration files...');

@@ -9,11 +9,12 @@ console.log('Building Shared package...');
 try {
   const sharedDir = path.join(__dirname, '../packages/shared');
 
-  // Create dist directory
+  // Clean and create dist directory
   const distDir = path.join(sharedDir, 'dist');
-  if (!fs.existsSync(distDir)) {
-    fs.mkdirSync(distDir, { recursive: true });
+  if (fs.existsSync(distDir)) {
+    fs.rmSync(distDir, { recursive: true, force: true });
   }
+  fs.mkdirSync(distDir, { recursive: true });
 
   // Generate type declaration files
   console.log('Generating type declaration files...');

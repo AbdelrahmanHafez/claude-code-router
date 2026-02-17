@@ -39,7 +39,7 @@ npm install -g @anthropic-ai/claude-code
 然后，安装 Claude Code Router：
 
 ```shell
-npm install -g @musistudio/claude-code-router
+npm install -g @hafez/claude-code-router
 ```
 
 ### 2. 配置
@@ -527,7 +527,7 @@ jobs:
 
       - name: Start Claude Code Router
         run: |
-          nohup ~/.bun/bin/bunx @musistudio/claude-code-router@1.0.8 start &
+          nohup ~/.bun/bin/bunx @hafez/claude-code-router@1.0.8 start &
         shell: bash
 
       - name: Run Claude Code

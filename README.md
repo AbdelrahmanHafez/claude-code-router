@@ -40,7 +40,7 @@ npm install -g @anthropic-ai/claude-code
 Then, install Claude Code Router:
 
 ```shell
-npm install -g @musistudio/claude-code-router
+npm install -g @hafez/claude-code-router
 ```
 
 ### 2. Configuration
@@ -319,6 +319,63 @@ The `activate` command sets the following environment variables:
 
 > **Note**: Make sure the Claude Code Router service is running (`ccr start`) before using the activated environment variables. The environment variables are only valid for the current shell session. To make them persistent, you can add `eval "$(ccr activate)"` to your shell configuration file (e.g., `~/.zshrc` or `~/.bashrc`).
 
+### 8. OpenAI Codex Authentication (ChatGPT Plus/Pro)
+
+If you have a ChatGPT Plus or Pro subscription, you can route requests through the OpenAI Codex API using OAuth, without needing a separate API key or local proxy.
+
+#### Login
+
+```shell
+ccr auth login
+```
+
+Select "OpenAI Codex (ChatGPT Plus/Pro)", then follow the device authorization flow:
+1. Visit the URL shown in the terminal
+2. Enter the code displayed
+3. Authorize the application in your browser
+
+#### Check Status
+
+```shell
+ccr auth status
+```
+
+Shows stored credentials, expiry time, and account ID.
+
+#### Configuration
+
+After logging in, configure your provider in `~/.claude-code-router/config.json`:
+
+```json
+{
+  "Providers": [
+    {
+      "name": "openai-codex",
+      "api_base_url": "https://chatgpt.com/backend-api/codex/responses",
+      "api_key": "",
+      "models": ["gpt-5.3-codex", "gpt-5.1-codex", "gpt-5.2-codex"],
+      "transformer": {
+        "use": ["openai-responses", "openai-codex"]
+      }
+    }
+  ],
+  "Router": {
+    "default": "openai-codex,gpt-5.3-codex"
+  }
+}
+```
+
+The `openai-codex` transformer handles OAuth token management automatically, including token refresh when credentials are about to expire. The `openai-responses` transformer converts between the Anthropic Messages format and the OpenAI Responses API format. Transformer order matters: `openai-responses` must come before `openai-codex`.
+
+#### Other Auth Commands
+
+```shell
+ccr auth logout   # Remove stored credentials
+ccr auth list     # List all stored credentials
+```
+
+Credentials are stored in `~/.claude-code-router/auth.json` with restricted file permissions.
+
 #### Providers
 
 The `Providers` array is where you define the different model providers you want to use. Each provider object requires:
@@ -416,6 +473,8 @@ Transformers allow you to modify the request and response payloads to ensure com
 - `vertex-gemini`: Handles the Gemini API using Vertex authentication.
 - `chutes-glm` Unofficial support for GLM 4.5 model via Chutes [chutes-glm-transformer.js](https://gist.github.com/vitobotta/2be3f33722e05e8d4f9d2b0138b8c863).
 - `qwen-cli` (experimental): Unofficial support for qwen3-coder-plus model via Qwen CLI [qwen-cli.js](https://gist.github.com/musistudio/f5a67841ced39912fd99e42200d5ca8b).
+- `openai-codex`: Authenticates with OpenAI Codex API using OAuth (ChatGPT Plus/Pro). Handles token management and refresh. Use with `openai-responses` transformer. See [OpenAI Codex Authentication](#8-openai-codex-authentication-chatgpt-pluspro).
+- `openai-responses`: Converts between Anthropic Messages format and OpenAI Responses API format. Required when using the Codex API or any OpenAI Responses API endpoint.
 - `rovo-cli` (experimental): Unofficial support for gpt-5 via Atlassian Rovo Dev CLI [rovo-cli.js](https://gist.github.com/SaseQ/c2a20a38b11276537ec5332d1f7a5e53).
 
 **Custom Transformers:**
@@ -554,7 +613,7 @@ jobs:
 
       - name: Start Claude Code Router
         run: |
-          nohup ~/.bun/bin/bunx @musistudio/claude-code-router@1.0.8 start &
+          nohup ~/.bun/bin/bunx @hafez/claude-code-router@1.0.8 start &
         shell: bash
 
       - name: Run Claude Code

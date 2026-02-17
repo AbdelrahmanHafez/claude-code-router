@@ -124,7 +124,7 @@ function HomepageHeader() {
 
                 {/* Copy Button */}
                 <button
-                  onClick={() => navigator.clipboard.writeText('npm install -g @musistudio/claude-code-router')}
+                  onClick={() => navigator.clipboard.writeText('npm install -g @hafez/claude-code-router')}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 hover:bg-white/10"
                   style={{ color: '#9ca3af' }}
                   title="Copy to clipboard"
@@ -147,7 +147,7 @@ function HomepageHeader() {
                       <span style={{ color: '#f97583', marginLeft: '0.5rem' }}>install</span>
                       <span style={{ color: '#fbbf24', marginLeft: '0.5rem' }}>-g</span>
                       <span style={{ color: '#e5e7eb', marginLeft: '0.5rem' }}>
-                        @musistudio/claude-code-router
+                        @hafez/claude-code-router
                       </span>
                     </span>
                   </div>

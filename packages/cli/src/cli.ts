@@ -35,6 +35,7 @@ const KNOWN_COMMANDS = [
   "install",
   "activate",
   "env",
+  "auth",
   "ui",
   "-v",
   "version",
@@ -56,6 +57,7 @@ Commands:
   preset        Manage presets (export, install, list, delete)
   install       Install preset from GitHub marketplace
   activate      Output environment variables for shell integration
+  auth          Manage provider authentication (login, logout, status)
   ui            Open the web UI in browser
   -v, version   Show version information
   -h, help      Show help information
@@ -271,6 +273,10 @@ async function main() {
     case "install":
       const presetName = process.argv[3];
       await handleInstallCommand(presetName);
+      break;
+    case "auth":
+      const { handleAuthCommand } = await import("./commands/auth");
+      await handleAuthCommand(process.argv[3] || "help");
       break;
     case "activate":
     case "env":

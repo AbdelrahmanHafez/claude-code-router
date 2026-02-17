@@ -10,3 +10,6 @@ export * from './preset/readPreset';
 export * from './preset/schema';
 export * from './preset/marketplace';
 
+// Export auth functionality
+export * from './auth/index';
+export * from './auth/codex-oauth';

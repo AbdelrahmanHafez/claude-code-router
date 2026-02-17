@@ -29,11 +29,10 @@ export class ProviderService {
   private initializeFromProvidersArray(providersConfig: ConfigProvider[]) {
     providersConfig.forEach((providerConfig: ConfigProvider) => {
       try {
-        if (
-          !providerConfig.name ||
-          !providerConfig.api_base_url ||
-          !providerConfig.api_key
-        ) {
+        if (!providerConfig.name || !providerConfig.api_base_url) {
+          return;
+        }
+        if (!providerConfig.api_key && !providerConfig.transformer?.use?.length) {
           return;
         }
 

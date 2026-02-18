@@ -449,8 +449,9 @@ function formatResponse(response: any, reply: FastifyReply, body: any) {
     reply.code(response.status);
   }
 
-  // Handle streaming response
-  const isStream = body.stream === true;
+  // Handle streaming response - check both request flag and response Content-Type
+  const contentType = response.headers?.get?.("Content-Type") || "";
+  const isStream = body.stream === true || contentType.includes("text/event-stream");
   if (isStream) {
     reply.header("Content-Type", "text/event-stream");
     reply.header("Cache-Control", "no-cache");

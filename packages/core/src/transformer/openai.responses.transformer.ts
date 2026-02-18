@@ -204,6 +204,11 @@ export class OpenAIResponsesTransformer implements Transformer {
   }
 
   async transformResponseOut(response: Response): Promise<Response> {
+    // If upstream transformer already converted to Chat Completions format, pass through
+    if (response.headers.get("X-CCR-Response-Converted")) {
+      return response;
+    }
+
     const contentType = response.headers.get("Content-Type") || "";
 
     if (contentType.includes("application/json")) {

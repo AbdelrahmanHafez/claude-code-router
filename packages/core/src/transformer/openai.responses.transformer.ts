@@ -152,7 +152,12 @@ export class OpenAIResponsesTransformer implements Transformer {
       input.push(message);
     });
 
-    (request as any).input = input;
+    // Strip Anthropic-specific fields (thinking, cache_control, id) that
+    // upstream OpenAI-compatible APIs don't understand.
+    (request as any).input = input.map((item: any) => {
+      const { thinking, cache_control, id, ...rest } = item;
+      return rest;
+    });
     delete (request as any).messages;
 
     if (Array.isArray(request.tools)) {

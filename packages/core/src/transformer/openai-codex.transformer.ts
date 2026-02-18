@@ -64,7 +64,7 @@ export class OpenAICodexTransformer implements Transformer {
     const body: Record<string, any> = {
       model: req.model,
       instructions: req.instructions || "",
-      input: this.sanitizeInput(req.input || []),
+      input: req.input || [],
       stream: true,
       store: false,
       parallel_tool_calls: req.parallel_tool_calls ?? true,
@@ -88,13 +88,6 @@ export class OpenAICodexTransformer implements Transformer {
     }
 
     return body;
-  }
-
-  private sanitizeInput(input: any[]): any[] {
-    return input.map((item: any) => {
-      const { thinking, cache_control, id, ...rest } = item;
-      return rest;
-    });
   }
 
   async transformResponseOut(response: Response): Promise<Response> {
